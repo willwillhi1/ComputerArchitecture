@@ -17,7 +17,7 @@ int missingNumber(const int*, const int);
 int main()
 {
     const int nums[] = {3, 0, 1};
-    const int numsSize = 2;
+    const int numsSize = 3;
     printf("%d\n", missingNumber(nums, numsSize));
     return 0;
 }
