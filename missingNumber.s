@@ -51,5 +51,5 @@ missingNumber:
         bgeu   s1, a1, exit # i < numsSize
         j      loop
 exit:
-    mv     a0, s0           # return value = res
+    mv     a0, s0           # return value = ans
     ret
