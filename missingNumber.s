@@ -25,8 +25,8 @@ numsSize:    .word 3
 #}
 
 main:
-    la     a0, nums         # s1 = nums[];  // array
-    lw     a1, numsSize     # s2 = numsSize;     // length of the array
+    la     a0, nums         # a0 = nums[];  // array
+    lw     a1, numsSize     # a1 = numsSize;     // length of the array
     jal    ra, missingNumber   # Function call
 
     # a0 is the return value and also the value we want to print
@@ -37,24 +37,19 @@ main:
     ecall                   
     
 missingNumber:
-    addi   s0, x0, 1        # s0 = m
-    addi   s1, x0, 0        # s1 = res
-    addi   s2, x0, 0        # s2 = i
-    bltu   a2, s0, exit     # m < n
+    addi   s0, a1, 0        # s0 = ans
+    addi   s1, x0, 0        # s1 = i
+    bgeu   s1, a1, exit     # i < numsSize
     loop:
-        slli   t0, s2, 2    # i*4
-        add    t0, a0, t0   # nums + i*4
+        slli   t0, s1, 2    # t0 = i*4
+        add    t0, a0, t0   # t0 = nums + i*4
         lw     t0, (0)t0    # t0 = nums[i]
-        bge    s2, a1, else # i >= numsSize
-        bltu   s0, t0, else # m < nums[i]
-        addi   s2, s2, 1    # ++i
-        j      done         # jump out of if-else statement
-        else:
-        addi   s1, s1, 1    # ++res
-        mv     t0, s0       # t0 = m
-        done:
-        add    s0, s0, t0   # m += nums[i] or m
-        bgeu   a2, s0, loop # n <= m
+        #nop
+        xor    t0, t0, s1   # t0 = i XOR num[i]
+        xor    s0, s0, t0   # ans = ans XOR t0
+        addi   s1, s1, 1    # ++i
+        bgeu   s1, a1, exit # i < numsSize
+        j      loop
 exit:
-    mv     a0, s1           # return value = res
+    mv     a0, s0           # return value = res
     ret
